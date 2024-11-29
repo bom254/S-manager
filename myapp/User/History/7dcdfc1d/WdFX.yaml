@@ -1,0 +1,35 @@
+name: Student_Management_App
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+    
+  async: ^2.11.0         # Downgraded async to be compatible with flutter_test
+  collection: ^1.17.0    # Keep collection at 1.18.0 for compatibility
+
+  cupertino_icons: ^1.0.8 # Default iOS style icons
+  http: ^1.2.2           # For making HTTP requests
+  google_maps_flutter: ^2.10.0  # Updated for Google Maps integration
+  image_picker: ^1.1.2    # Updated for picking images from the device
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter:
+    sdk: flutter
+  url_launcher: ^6.0.9 # Add this line
+
+  font_awesome_flutter: ^10.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/student-education-logo-vector-14724398.jpg
