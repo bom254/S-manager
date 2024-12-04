@@ -37,7 +37,7 @@ class EnrollScreen extends StatelessWidget {
               },
               child: Text('Enroll Now'),
               style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
+                backgroundColor: Colors.blue,
                 padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 textStyle: TextStyle(fontSize: 18),
                 shape: RoundedRectangleBorder(

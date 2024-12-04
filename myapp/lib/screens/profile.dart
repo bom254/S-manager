@@ -39,7 +39,7 @@ class ProfileScreen extends StatelessWidget {
                 },
                 child: Text('Edit Profile'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
+                  backgroundColor: Colors.blue,
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   textStyle: TextStyle(fontSize: 18),
                   shape: RoundedRectangleBorder(
@@ -54,7 +54,7 @@ class ProfileScreen extends StatelessWidget {
                 },
                 child: Text('Logout'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
+                  backgroundColor: Colors.red,
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   textStyle: TextStyle(fontSize: 18),
                   shape: RoundedRectangleBorder(

@@ -1,16 +1,23 @@
 name: student_management_app
-description: A Flutter app for managing students.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+description: A Flutter application for managing student information and academic results.
+
+publish_to: 'none' # Remove this line if you want to publish to pub.dev
+
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  
+  sdk: ">=2.12.0 <3.0.0" # Adjust the SDK version as needed
+
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^6.0.0
-  http: ^0.13.3
+  provider: ^6.0.0 # State management package
+  http: ^0.13.3 # For making HTTP requests if needed
+  parse_server_sdk_flutter: ^9.0.0 # If using Back4App for backend
+  cloud_firestore: ^4.14.0 # If using Firebase Firestore
+  firebase_core: ^2.24.2 # If using Firebase
+  firebase_auth: ^4.16.0 # If using Firebase Authentication (optional)
+  fl_chart: ^0.69.2
 
 dev_dependencies:
   flutter_test:
@@ -18,5 +25,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/images/student-education-logo-vector-14724398.jpg
+
+# Add assets if you have any images or fonts
+assets:
+  - assets/images/ # Path to your image assets
