@@ -1,0 +1,25 @@
+file:///home/blogger/Documents/S-manager/myapp/User/History/-73c685f6/HHh9.dart {"mtime":1732813110207,"ctime":1732813110207,"size":577,"etag":"3dd4f50d1ij","orphaned":false,"typeId":""}
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'models/student.dart';
+import 'screens/home_screen.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override 
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => StudentModel(),
+      child: MaterialApp(
+        title: 'Student Management App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: Homescreen(),
+      ),
+    );
+  }
+}

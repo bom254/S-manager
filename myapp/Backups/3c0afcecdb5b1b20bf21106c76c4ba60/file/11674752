@@ -1,0 +1,66 @@
+file:///home/blogger/Documents/S-manager/myapp/User/History/-73c685f6/6zIO.dart {"mtime":1732816408335,"ctime":1732816408335,"size":1678,"etag":"3dd4jo73h1n4","orphaned":false,"typeId":""}
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'models/student.dart';
+import 'screens/home_screen.dart';
+import 'dart:async';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override 
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => StudentModel(),
+      child: MaterialApp(
+        title: 'Student Management App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: '/', // This will show the SplashScreen
+        routes: {
+          '/': (context) =>  Home(),
+          '/home': (context) =>  Homescreen(),
+        },
+      ),
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  const Home({Key? key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Automatically navigate to the LandingPage after 3 seconds
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.pushReplacementNamed(context, '/home');
+    });
+
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Display the logo image
+            Image.asset(
+              'assets/images/student-education-logo-vector-14724398.jpg',
+              width: 150,
+              height: 150,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Student Management App',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

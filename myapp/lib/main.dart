@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:student_management_app/screens/teacher_panel.dart';
 import 'models/student.dart';
 import 'screens/enroll.dart';
+import 'screens/kusomalogin.dart';
 import 'screens/view_courses.dart';
 import 'screens/home_screen.dart';
 import 'screens/admin_panel.dart';
@@ -12,18 +13,10 @@ import 'screens/loginscreen.dart';
 import 'screens/signupscreen.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Parse SDK
-  final keyApplicationId = '8XipTN8S4A0hBPdb5LOJTJMOFGIkFvISp6IGMNPS'; // Replace with your Application ID
-  final keyClientKey = '9isWy7zGq8huDlXd9qqY94L0h5KlGGsso6pzIuPC'; // Replace with your Client Key
-  final keyParseServerUrl = 'https://parseapi.back4app.com'; // Replace with your Parse Server URL
-
-  await Parse().initialize(
-    keyApplicationId,
-    keyParseServerUrl,
-    clientKey: keyClientKey,
-    debug: true,
+  await Supabase.initialize(
+    url: 'https://qkmqgjpiirpxngfcjvxe.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFrbXFnanBpaXJweG5nZmNqdnhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM0MDQ4MzgsImV4cCI6MjA0ODk4MDgzOH0.eXKw6Mm1BhtXEERaSlxG_NY2qKhS0o-Sd13sxuS95Nw',
   );
 
   runApp(MyApp());
@@ -40,10 +33,11 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: '/login', // Change this based on your initial screen
+        initialRoute: '/tosignup', // Change this based on your initial screen
         routes: {
           '/': (context) => const Home(),
           '/home': (context) => const Home(),
+          'tosignup': (context) => kusomaLogin(),
           '/login': (context) => LoginScreen(),
           '/signup': (context) => SignUpScreen(),
           '/courses': (context) => ViewCoursesScreen(),

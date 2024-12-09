@@ -1,155 +1,245 @@
 import 'package:flutter/material.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
-class LoginScreen extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String selectedRole = "Student"; // Default selected role
+  final TextEditingController _inputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Welcome Back',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
-                ),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Please login to continue',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey[600],
-                ),
-              ),
-              SizedBox(height: 40),
-              TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  labelStyle: TextStyle(color: Colors.blueAccent),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.blueAccent),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.blue),
+      backgroundColor: Colors.green[900],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 80),
+            // Logo and title
+            Column(
+              children: [
+                Icon(Icons.menu_book, size: 80, color: Colors.white),
+                SizedBox(height: 10),
+                Text(
+                  "Kusoma",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  labelStyle: TextStyle(color: Colors.blueAccent),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.blueAccent),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
+                SizedBox(height: 10),
+                Text(
+                  "Learn from highly experienced teachers, take tests and track your performance.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                 ),
-              ),
-              SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () async {
-                  final email = emailController.text.trim();
-                  final password = passwordController.text.trim();
-
-                  if (email.isEmpty || password.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please fill in all fields!')),
-                    );
-                    return;
-                  }
-
-                  final isValid = await verifyLogin(email, password);
-
-                  if (isValid) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Login Successful!')),
-                    );
-                    Navigator.pushReplacementNamed(context, '/home');
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Invalid email or password!')),
-                    );
-                  }
-                },
-                child: Text('Login'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  textStyle: TextStyle(fontSize: 18),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't have an account? "),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/signup');
-                    },
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+              ],
+            ),
+            SizedBox(height: 40),
+            // Login Card
+            Container(
+              padding: EdgeInsets.all(20),
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
                   ),
                 ],
               ),
-            ],
-          ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Role Tabs
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildRoleTab("Student"),
+                      _buildRoleTab("Teacher"),
+                      _buildRoleTab("Parent"),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  // Input fields and messages
+                  Text(
+                    _getInstructionText(),
+                    style: TextStyle(color: Colors.blue[700], fontSize: 14),
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    controller: _inputController,
+                    keyboardType: selectedRole == "Parent"
+                        ? TextInputType.phone
+                        : TextInputType.text,
+                    decoration: InputDecoration(
+                      labelText: _getInputLabel(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: selectedRole == "Student"
+                        ? TextButton(
+                            onPressed: () {
+                              // Forgot Username logic
+                            },
+                            child: Text(
+                              "Forgot Username?",
+                              style: TextStyle(color: Colors.green[700]),
+                            ),
+                          )
+                        : SizedBox(),
+                  ),
+                  SizedBox(height: 10),
+                  // Continue Button
+                  ElevatedButton(
+                    onPressed: () {
+                      // Handle login
+                      _validateAndLogin();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[700],
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Continue",
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Join for Free
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("New to our platform? "),
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to signup
+                          Navigator.pushReplacementNamed(context, '/tosignup');
+                        },
+                        child: Text(
+                          "Join for Free",
+                          style: TextStyle(
+                            color: Colors.green[700],
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  // Contact Options
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildContactOption(Icons.whatshot, "WhatsApp"),
+                      _buildContactOption(Icons.call, "Call"),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Future<void> loginUser(String name, String email, String password) async {
-    final user = ParseUser(email, password, email)
-      ..set('name', name);
+  // Helper for Role Tabs
+  Widget _buildRoleTab(String role) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedRole = role;
+          _inputController.clear();
+        });
+      },
+      child: Column(
+        children: [
+          Text(
+            role,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: selectedRole == role ? Colors.green[700] : Colors.black54,
+            ),
+          ),
+          if (selectedRole == role)
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              height: 2,
+              width: 50,
+              color: Colors.green[700],
+            ),
+        ],
+      ),
+    );
+  }
 
-    final response = await user.signUp();
+  // Contact Option Widget
+  Widget _buildContactOption(IconData icon, String label) {
+    return Column(
+      children: [
+        Icon(icon, color: Colors.green[700], size: 30),
+        SizedBox(height: 5),
+        Text(
+          label,
+          style: TextStyle(color: Colors.black54),
+        ),
+      ],
+    );
+  }
 
-    if (response.success) {
-      print('User registered successfully!');
-    } else {
-      print('Error: ${response.error?.message}');
+  // Input label based on the role
+  String _getInputLabel() {
+    switch (selectedRole) {
+      case "Teacher":
+        return "Username";
+      case "Parent":
+        return "Phone Number";
+      default:
+        return "Username or Phone number";
     }
   }
 
-  Future<bool> verifyLogin(String email, String password) async {
-    final user = ParseUser(email, password, null);
+  // Instruction text based on the role
+  String _getInstructionText() {
+    switch (selectedRole) {
+      case "Teacher":
+        return "";
+      case "Parent":
+        return "";
+      default:
+        return "";
+    }
+  }
 
-    final response = await user.login();
-
-    if (response.success) {
-      print('Login successful!');
-      return true;
+  // Validate input and login
+  void _validateAndLogin() {
+    final input = _inputController.text;
+    if (input.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please enter your ${_getInputLabel().toLowerCase()}.")),
+      );
     } else {
-      print('Error: ${response.error?.message}');
-      return false;
+      // Handle successful validation
+      print("Logging in as $selectedRole with input: $input");
     }
   }
 }

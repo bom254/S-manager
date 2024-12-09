@@ -1,11 +1,33 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 class SignUpScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  Future<void> signUpUser (String name, String email, String password) async {
+    final response = await http.post(
+      Uri.parse('http://localhost:3000/api/signup'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic> {
+        'name': name,
+        'email': email,
+        'password': password,
+      }),
+    );
+
+    if(response.statusCode==201) {
+      print('Signup successful');
+      //Navigator.pop(context);
+      return print('Signup failed: ${response.body}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +105,13 @@ class SignUpScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () async {
-                  await signUpUser(nameController.text, emailController.text, passwordController.text);
-                  nameController.clear();
-                  emailController.clear();
-                  passwordController.clear();
+                onPressed: () {
+                  signUpUser(
+                    nameController.text, 
+                    emailController.text,
+                    passwordController.text
+                  );
+                  
                 },
                 child:
                     Text('Sign Up'),
@@ -118,8 +142,8 @@ class SignUpScreen extends StatelessWidget {
                 child:
                     Text('Already have an account? Login',
                         style:
-                            TextStyle(color:
-                                Colors.blueAccent)),
+                            TextStyle(color:Colors.blueAccent)
+                    ),
               ),
             ],
           ),
@@ -128,23 +152,7 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  Future<void> signUpUser(String name, String email, String password) async {
-    // ParseUser instance
-    var signUp = ParseObject('Users')
-    ..set('name', name)
-    ..set('email', email)
-    ..set('password', password);
-
-   await signUp.save();
-  }
-
-  bool isValidEmail(String email) {
-    // Regular expression for validating an Email
-    String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-    RegExp regex = RegExp(pattern);
-    return regex.hasMatch(email);
-  }
-
+  
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
