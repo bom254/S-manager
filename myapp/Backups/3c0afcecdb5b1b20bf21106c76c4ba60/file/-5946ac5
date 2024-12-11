@@ -1,0 +1,256 @@
+file:///home/blogger/Documents/S-manager/myapp/lib/screens/schoolsignup.dart {"mtime":1733835633844,"ctime":1733829959875,"size":2224,"etag":"3depapi1n29n","orphaned":false,"typeId":""}
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class schoolSignupScreen extends StatefulWidget {
+  @override
+  _schoolSignupScreenState createState() => _schoolSignupScreenState();
+}
+
+class _schoolSignupScreenState extends State<schoolSignupScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
+  final _countyController = TextEditingController();
+  final _designationController = TextEditingController();
+  final _schoolNameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _acceptTerms = false;
+
+  final SupabaseClient _supabase = SupabaseClient(
+    'https://your-supabase-url.supabase.co', // Replace with your Supabase URL
+    'your-supabase-key', // Replace with your Supabase API key
+  );
+
+  @override
+  void dispose() {
+    // Dispose controllers to free up memory.
+    _fullNameController.dispose();
+    _emailController.dispose();
+    _phoneNumberController.dispose();
+    _countyController.dispose();
+    _designationController.dispose();
+    _schoolNameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _registerUser() async {
+    if (!_acceptTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('You must accept the terms of service')),
+      );
+      return;
+    }
+
+    if (_formKey.currentState!.validate()) {
+      try {
+        // Use email and password directly
+        final response = await _supabase.auth.signUp(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+
+        if (response.user != null) {
+          // Insert additional user data into the 'users' table
+          await _supabase.from('users').insert({
+            'full_name': _fullNameController.text.trim(),
+            'email': _emailController.text.trim(),
+            'phone_number': _phoneNumberController.text.trim(),
+            'county': _countyController.text.trim(),
+            'designation': _designationController.text.trim(),
+            'school_name': _schoolNameController.text.trim(),
+          });
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Registration failed. Please try again.')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Registration'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                controller: _fullNameController,
+                decoration: InputDecoration(
+                  labelText: 'Full Name',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your full name';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _phoneNumberController,
+                decoration: InputDecoration(
+                  labelText: 'Phone Number',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.phone,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your phone number';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: 'County',
+                  border: OutlineInputBorder(),
+                ),
+                items: ['County 1', 'County 2']
+                    .map((county) => DropdownMenuItem(
+                          child: Text(county),
+                          value: county,
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  _countyController.text = value!;
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select a county';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: 'Designation',
+                  border: OutlineInputBorder(),
+                ),
+                items: ['Designation 1', 'Designation 2']
+                    .map((designation) => DropdownMenuItem(
+                          child: Text(designation),
+                          value: designation,
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  _designationController.text = value!;
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select a designation';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _schoolNameController,
+                decoration: InputDecoration(
+                  labelText: 'School Name',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your school name';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a password';
+                  }
+                  if (value.length < 6) {
+                    return 'Password must be at least 6 characters long';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              Row(
+                children: [
+                  Checkbox(
+                    value: _acceptTerms,
+                    onChanged: (value) {
+                      setState(() {
+                        _acceptTerms = value!;
+                      });
+                    },
+                  ),
+                  Text('I accept the terms of service'),
+                ],
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _registerUser,
+                child: Text('Register'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home'),
+      ),
+      body: Center(
+        child: Text('Welcome!'),
+      ),
+    );
+  }
+}

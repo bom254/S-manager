@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 class SignUpScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
