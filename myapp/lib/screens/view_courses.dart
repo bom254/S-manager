@@ -14,29 +14,55 @@ class ViewCoursesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Courses'),
-        backgroundColor: Colors.blue,
+        title: Text(
+          'Courses',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.green[900],
       ),
       body: ListView.builder(
         itemCount: courses.length,
         itemBuilder: (context, index) {
-          return Card(
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            child: ListTile(
-              title: Text(courses[index]),
-              subtitle: Text('Click to enroll in this course'),
-              trailing: Icon(Icons.arrow_forward),
+          return Material(
+            elevation: 3,
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20),
               onTap: () {
-                // Navigate to the enrollment screen for the selected course
                 Navigator.push(
-                  context,
+                  context, 
                   MaterialPageRoute(
-                    builder: (context) => EnrollScreen(courseName: courses[index]),
+                    builder: (BuildContext context) => EnrollScreen(),
                   ),
                 );
               },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(name),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: 
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          );
+          )
         },
       ),
     );

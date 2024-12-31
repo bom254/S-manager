@@ -1,5 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:student_management_app/screens/enroll.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:student_management_app/screens/teacher_panel.dart';
 import 'models/student.dart';
@@ -28,13 +31,18 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Student Management App',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          colorScheme: ColorScheme.light(
+            background: Colors.green[900], 
+            primary: Colors.white, 
+            onPrimary: Colors.grey.shade200,  
+          ),
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: '/login', // Change this based on your initial screen
+        initialRoute: '/courses', // Change this based on your initial screen
         routes: {
           '/': (context) => const Home(),
           '/home': (context) => const Home(),
+          '/enroll': (context) =>  EnrollScreen(courseName: '',),
           'tosignup': (context) => kusomaLogin(),
           '/login': (context) => LoginScreen(),
           '/signup': (context) => SignUpScreen(),
@@ -55,10 +63,18 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
-        backgroundColor: Colors.blue,
+        title: Text(
+          'Home',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.green[900],
         actions: [
           IconButton(
+            color: Colors.white,
             icon: Icon(Icons.book),
             tooltip: 'View Courses',
             onPressed: () {
@@ -66,6 +82,7 @@ class Home extends StatelessWidget {
             },
           ),
           IconButton(
+            color: Colors.white,
             icon: Icon(Icons.add),
             tooltip: 'Enroll',
             onPressed: () {
@@ -73,6 +90,7 @@ class Home extends StatelessWidget {
             },
           ),
           IconButton(
+            color: Colors.white,
             icon: Icon(Icons.person),
             tooltip: 'View Profile',
             onPressed: () {
@@ -81,6 +99,7 @@ class Home extends StatelessWidget {
           ),
         ],
       ),
+      backgroundColor: Colors.green[800],
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(20.0),
@@ -89,10 +108,21 @@ class Home extends StatelessWidget {
             children: [
               Text(
                 'Welcome to the Student Management System',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                style: TextStyle(
+                  fontSize: 24, 
+                  fontWeight: FontWeight.bold, 
+                  color: Colors.white,
+                ),
               ),
               SizedBox(height: 20),
-              Text('Here are some features you can explore:', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
+              Text(
+                'Here are some features you can explore:', 
+                style: TextStyle(
+                  fontSize: 18, 
+                  color: Colors.grey[900],
+                  fontWeight: FontWeight.w500
+                )
+              ),
               SizedBox(height: 20),
               // Feature Cards...
             ],
