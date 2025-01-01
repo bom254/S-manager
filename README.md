@@ -17,5 +17,5 @@ Installation Instructions
 Code Structure
 
     models/: Contains the Student model and state management logic.
-    screens/: Contains the UI screens for adding, updating, and listing students.
+    screens/: Contains the UI screens for adding, updating, and listing students, getting updates on report books,  assignments and registration 
     widgets/: Reusable widgets, such as the student card.
